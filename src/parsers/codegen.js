@@ -17,6 +17,15 @@ var Literal = 'Literal',
     eventPrefix  = 'event.vega.',
     thisPrefix   = 'this.';
 
+// Selection resolution strategies.
+var SINGLE = 'single',
+    INDEPENDENT = 'independent',
+    UNION = 'union',
+    INTERSECT = 'intersect',
+    UNION_OTHERS = 'union_others',
+    INTERSECT_OTHERS = 'intersect_others',
+    keyField = '$key';
+
 // Expression Functions
 
 var eventFunctions = ['view', 'item', 'group', 'xy', 'x', 'y'];
@@ -231,6 +240,40 @@ export var extendedFunctions = {
       return r0 <= value && value <= r1;
     },
 
+  // Interval selection tuples are of the form:
+  //   {$key: '', intervals: [{field: '', extent: []}]}
+  inInterval: function(name, key, datum, resolve) {
+      var data = this.context.data[name],
+          vals = data ? data.values.value : [],
+          kidx = data ? data['lookup:' + keyField] : {},
+          inrange = function(interval) {
+            return this.inrange(datum[interval.field], interval.extent);
+          },
+          test = function(val) {
+            return val.intervals.every(inrange, this);
+          },
+          others = function(interval) {
+            return interval[keyField] !== key;
+          };
+
+      if (resolve === SINGLE) {
+        return vals[vals.length-1].intervals.every(inrange, this);
+      }
+
+      if (resolve === INDEPENDENT) {
+        return kidx.value && kidx.value[key] ?
+          kidx.value[key].intervals.every(inrange, this) : undefined;
+      }
+
+      if (resolve === UNION_OTHERS || resolve === INTERSECT_OTHERS) {
+        vals = vals.filter(others);
+      }
+
+      return resolve === INTERSECT || resolve === INTERSECT_OTHERS ?
+        vals.every(test, this) : resolve === UNION || resolve == UNION_OTHERS ?
+        vals.some(test, this)  : false;
+    },
+
   encode: function(item, name, retval) {
       if (item) {
         var df = this.context.dataflow,
@@ -345,10 +388,22 @@ function tuplesVisitor(name, args, scope, params) {
   }
 }
 
+function intervalVisitor(name, args, scope, params) {
+  if (args[0].type !== Literal) error('First argument to indata must be a string literal.');
+
+  var data = args[0].value,
+      indexName = indexPrefix + keyField;
+
+  if (!params.hasOwnProperty(indexName)) {
+    params[indexName] = scope.getData(data).lookupRef(scope, keyField);
+  }
+}
+
 function visitors() {
   var v = {
     indata: indataVisitor,
-    tuples: tuplesVisitor
+    tuples: tuplesVisitor,
+    inInterval: intervalVisitor
   };
   scaleFunctions.forEach(function(_) { v[_] = scaleVisitor; });
   return v;

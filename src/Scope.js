@@ -1,4 +1,4 @@
-import DataScope from './DataScope';
+import {default as DataScope, INDEX_TYPES} from './DataScope';
 import {
   aggrField, Ascending, compareRef, Entry,
   fieldRef, keyRef, isSignal, operator, ref
@@ -132,9 +132,13 @@ prototype.finish = function() {
     annotate(ds.input,  name, 'input');
     annotate(ds.output, name, 'output');
     annotate(ds.values, name, 'values');
-    for (var field in ds.index) {
-      annotate(ds.index[field], name, 'index:' + field);
-    }
+
+    INDEX_TYPES.forEach(function(type) {
+      var idx = ds[type];
+      for (var field in idx) {
+        annotate(idx[field], name, type + ':' + field);
+      }
+    });
   }
 
   return this;
