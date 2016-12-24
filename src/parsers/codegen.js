@@ -2,7 +2,8 @@ import {ASTNode, functions, constants} from 'vega-expression';
 import {bandSpace} from 'vega-scale';
 import {scaleGradient} from 'vega-scenegraph';
 import {
-  error, isArray, isObject, isString, pad, stringValue, truncate, truthy
+  error, isArray, isObject, isString, pad, stringValue, truncate, truthy,
+  key as keyf
 } from 'vega-util';
 import {rgb, lab, hcl, hsl} from 'd3-color';
 import {format} from 'd3-format';
@@ -24,7 +25,10 @@ var SINGLE = 'single',
     INTERSECT = 'intersect',
     UNION_OTHERS = 'union_others',
     INTERSECT_OTHERS = 'intersect_others',
-    keyField = '$key';
+    keyField  = 'key',
+    unitField = 'unit',
+    keyUnitField = keyField + '_' + unitField,
+    ptSelectionIndexes = [keyField, unitField, keyUnitField];
 
 // Expression Functions
 
@@ -240,12 +244,47 @@ export var extendedFunctions = {
       return r0 <= value && value <= r1;
     },
 
+  // Single/multi selection tuples are of the form:
+  //  {key: '', unit: '', key_unit: ''}
+  inPointSelection: function(name, unit, datum, fields, resolve) {
+      var data = this.context.data[name],
+          kidx = data ? data['index:' + keyField] : undefined,
+          uidx = data ? data['index:' + unitField] : undefined,
+          kuidx = data ? data['index:' + keyUnitField] : undefined,
+          key  = keyf(fields)(datum),
+          keyu = key + '|',
+          test = function(uid) {
+            return kuidx && kuidx.value[keyu + uid];
+          };
+
+      if (resolve === SINGLE || resolve === UNION) {
+        return kidx && kidx.value[key];
+      }
+
+      if (resolve === INDEPENDENT) {
+        return kuidx && kuidx.value[keyu + unit];
+      }
+
+      var units = uidx && Object.keys(uidx.value);
+      if (!units) return false;
+
+      if (resolve === INTERSECT) {
+        return units.every(test);
+      } else {
+        units = units.filter(function(uid) { return +uid !== unit; });
+        return resolve === UNION_OTHERS ?
+          units.some(test) : units.every(test);
+      }
+
+      return false;
+    },
+
   // Interval selection tuples are of the form:
-  //   {$key: '', intervals: [{field: '', extent: []}]}
-  inInterval: function(name, key, datum, resolve) {
+  //   {unit: '', intervals: [{field: '', extent: []}]}
+  inIntervalSelection: function(name, unit, datum, resolve) {
       var data = this.context.data[name],
           vals = data ? data.values.value : [],
-          kidx = data ? data['lookup:' + keyField] : {},
+          uidx = data ? data['lookup:' + unitField] : undefined,
           inrange = function(interval) {
             return this.inrange(datum[interval.field], interval.extent);
           },
@@ -253,7 +292,7 @@ export var extendedFunctions = {
             return val.intervals.every(inrange, this);
           },
           others = function(interval) {
-            return interval[keyField] !== key;
+            return interval[unitField] !== unit;
           };
 
       if (resolve === SINGLE) {
@@ -261,8 +300,8 @@ export var extendedFunctions = {
       }
 
       if (resolve === INDEPENDENT) {
-        return kidx.value && kidx.value[key] ?
-          kidx.value[key].intervals.every(inrange, this) : undefined;
+        return uidx && uidx.value[unit] ?
+          uidx.value[unit].intervals.every(inrange, this) : undefined;
       }
 
       if (resolve === UNION_OTHERS || resolve === INTERSECT_OTHERS) {
@@ -388,14 +427,27 @@ function tuplesVisitor(name, args, scope, params) {
   }
 }
 
+function ptSelectionVisitor(name, args, scope, params) {
+  if (args[0].type !== Literal) error('First argument to inPointSelection must be a string literal.');
+
+  var data = scope.getData(args[0].value);
+
+  ptSelectionIndexes.forEach(function(field) {
+    var indexName = indexPrefix + field;
+    if (!params.hasOwnProperty(indexName)) {
+      params[indexName] = data.indataRef(scope, field);
+    }
+  });
+}
+
 function intervalVisitor(name, args, scope, params) {
-  if (args[0].type !== Literal) error('First argument to indata must be a string literal.');
+  if (args[0].type !== Literal) error('First argument to inIntervalSelection must be a string literal.');
 
   var data = args[0].value,
-      indexName = indexPrefix + keyField;
+      indexName = indexPrefix + unitField;
 
   if (!params.hasOwnProperty(indexName)) {
-    params[indexName] = scope.getData(data).lookupRef(scope, keyField);
+    params[indexName] = scope.getData(data).lookupRef(scope, unitField);
   }
 }
 
@@ -403,7 +455,8 @@ function visitors() {
   var v = {
     indata: indataVisitor,
     tuples: tuplesVisitor,
-    inInterval: intervalVisitor
+    inPointSelection: ptSelectionVisitor,
+    inIntervalSelection: intervalVisitor
   };
   scaleFunctions.forEach(function(_) { v[_] = scaleVisitor; });
   return v;
