@@ -52,7 +52,7 @@ export default function(spec, scope) {
 function parseLiteral(v, scope) {
   return !isObject(v) ? v
     : v.signal ? scope.signalRef(v.signal)
-    : error('Unsupported object: ' + v);
+    : error('Unsupported object: ' + JSON.stringify(v));
 }
 
 // -- SCALE DOMAIN ----
