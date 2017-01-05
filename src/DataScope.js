@@ -2,6 +2,10 @@ import {entry, ref, keyFieldRef, aggrField, sortKey} from './util';
 import {Aggregate, Collect} from './transforms';
 import {isString} from 'vega-util';
 
+export var INDEX  = 'index';
+export var LOOKUP = 'lookup';
+export var INDEX_TYPES = [INDEX, LOOKUP];
+
 export default function DataScope(scope, input, output, values, aggr) {
   this.scope = scope; // parent scope object
   this.input = input;   // first operator in pipeline (tuple input)
@@ -12,7 +16,8 @@ export default function DataScope(scope, input, output, values, aggr) {
   this.aggregate = aggr;
 
   // lookup table of field indices
-  this.index = {};
+  this.lookup = {};
+  this.index  = {};
 }
 
 DataScope.fromEntries = function(scope, entries) {
@@ -103,7 +108,7 @@ function cache(scope, ds, name, optype, field, counts, index) {
       : {field: scope.fieldRef(field), pulse: ref(ds.output)};
     if (sort) params.sort = scope.sortRef(counts);
     op = scope.add(entry(optype, undefined, params));
-    if (index) ds.index[field] = op;
+    if (index) ds[index][field] = op;
     v = ref(op);
     if (k != null) cache[k] = v;
   }
@@ -127,9 +132,9 @@ prototype.valuesRef = function(scope, field, sort) {
 };
 
 prototype.lookupRef = function(scope, field) {
-  return cache(scope, this, 'lookup', 'TupleIndex', field, false);
+  return cache(scope, this, 'lookups', 'TupleIndex', field, false, LOOKUP);
 };
 
 prototype.indataRef = function(scope, field) {
-  return cache(scope, this, 'indata', 'TupleIndex', field, true, true);
+  return cache(scope, this, 'indata', 'TupleIndex', field, true, INDEX);
 };
