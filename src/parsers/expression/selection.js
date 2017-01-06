@@ -8,10 +8,15 @@ var INDEPENDENT = 'independent',
 function testPoint(datum, entry) {
   var fields = entry.fields,
       values = entry.values,
+      $ = entry._$ || (entry._$ = []),
       n = fields.length,
       i = 0;
 
-  for (; i<n; ++i) if (field(fields[i])(datum) !== values[i]) return false;
+  for (; i<n; ++i) {
+    $[i] = $[i] || field(fields[i]);
+    if ($[i](datum) !== values[i]) return false;
+  }
+
   return true;
 }
 
@@ -24,10 +29,11 @@ function inrange(value, range) {
 function testInterval(datum, entry) {
   var intervals = entry.intervals,
       n = intervals.length,
-      i = 0;
+      i = 0, $;
 
   for (; i<n; ++i) {
-    if (!inrange(field(intervals[i].field)(datum), intervals[i].extent)) return false;
+    $ = intervals[i]._$ || (intervals[i]._$ = field(intervals[i].field));
+    if (!inrange($(datum), intervals[i].extent)) return false;
   }
   return true;
 }
