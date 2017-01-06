@@ -1,4 +1,5 @@
 import {field} from 'vega-util';
+import inrange from './inrange';
 
 var INDEPENDENT = 'independent',
     INTERSECT = 'intersect',
@@ -18,12 +19,6 @@ function testPoint(datum, entry) {
   }
 
   return true;
-}
-
-function inrange(value, range) {
-  var r0 = range[0], r1 = range[range.length-1], t;
-  if (r0 > r1) t = r0, r0 = r1, r1 = t;
-  return r0 <= value && value <= r1;
 }
 
 function testInterval(datum, entry) {
