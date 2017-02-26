@@ -62,9 +62,9 @@ function defaults() {
     },
     
     // role defaults for special mark types in Vega-Lite
-    point: {size: vlDefaultSymbolSize, strokeWidth: vlDefaultSymbolStrokeWidth, shape: 'circle'},
-    circle: {size: vlDefaultSymbolSize, strokeWidth: vlDefaultSymbolStrokeWidth},
-    square: {size: vlDefaultSymbolSize, strokeWidth: vlDefaultSymbolStrokeWidth},
+    point: { size: vlDefaultSymbolSize, strokeWidth: vlDefaultSymbolStrokeWidth, shape: 'circle' },
+    circle: { size: vlDefaultSymbolSize, strokeWidth: vlDefaultSymbolStrokeWidth },
+    square: { size: vlDefaultSymbolSize, strokeWidth: vlDefaultSymbolStrokeWidth },
     
     
     // defaults for axes
