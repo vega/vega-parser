@@ -11,6 +11,7 @@ export default function(userConfig) {
 }
 
 var defaultSymbolSize = 30,
+    defaultPointOpacity = 0.7,
     defaultStrokeWidth = 2,
     defaultColor = '#4c78a8',
     black = "#000",
@@ -66,17 +67,23 @@ function defaults() {
 
     // defaults for marks using special roles
     point: {
+      opacity: defaultPointOpacity,
       size: defaultSymbolSize,
       strokeWidth: defaultStrokeWidth,
       shape: 'circle'
     },
     circle: {
+      opacity: defaultPointOpacity,
       size: defaultSymbolSize,
       strokeWidth: defaultStrokeWidth
     },
     square: {
+      opacity: defaultPointOpacity,
       size: defaultSymbolSize,
       strokeWidth: defaultStrokeWidth
+    },
+    tick: {
+      opacity: defaultPointOpacity
     },
 
     // defaults for axes
