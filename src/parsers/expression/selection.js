@@ -1,4 +1,4 @@
-import {field} from 'vega-util';
+import {field, isDate} from 'vega-util';
 import inrange from './inrange';
 
 var UNION = 'union',
@@ -127,7 +127,7 @@ export function vlPointDomain(name, encoding, field, op) {
     domain.push(value.value);
   }
 
-  return domain;
+  return domain.length ? domain : undefined;
 }
 
 function asc(a, b) { return a-b; }
@@ -172,7 +172,7 @@ export function vlIntervalDomain(name, encoding, field, op) {
     }
   }
 
-  return extents.reduce(function(domain, ext) {
+  var domain = extents.reduce(function(domain, ext) {
     if (!domain.length) return ext;
     if (op === UNION) {
       return unionInterval(ext, domain);
@@ -181,4 +181,9 @@ export function vlIntervalDomain(name, encoding, field, op) {
         enclosesInterval(domain, ext) ? intersectInterval(ext, domain) : [];
     }
   }, []);
+
+  return domain.length &&
+    (isDate(domain[0]) ?
+      domain[0].getTime() !== domain[1].getTime() :
+      domain[0] !== domain[1]) ? domain : undefined;
 }
