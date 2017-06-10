@@ -15,7 +15,7 @@ function valueSchema(type) {
             "oneOf": [
               { "$ref": "#/refs/signal" },
               {
-                "properties": {"value": {}},
+                "properties": {"value": type},
                 "required": ["value"]
               },
               {
