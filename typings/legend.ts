@@ -1,12 +1,13 @@
-import {EncodeEntry, NumericValueRef} from './encode';
+import {Encode, GroupEncodeEntry, NumericValueRef, RectEncodeEntry, SymbolEncodeEntry, TextEncodeEntry} from './encode';
 import {SignalRef} from './signal';
 
-export interface GuideEncodeEntry {
+export interface GuideEncodeEntry<T>  {
   name?: string;
   interactive?: boolean;
-  enter?: EncodeEntry;
-  update?: EncodeEntry;
-  exit?: EncodeEntry;
+  enter?: T;
+  update?: T;
+  exit?: T;
+  hover?: T;
 }
 
 export type LegendType = 'gradient' | 'symbol';
@@ -28,11 +29,11 @@ export interface BaseLegend {
   format?: string | SignalRef;
   values?: any[] | SignalRef;
   encode?: {
-    title?: GuideEncodeEntry,
-    labels?: GuideEncodeEntry,
-    legend?: GuideEncodeEntry,
-    symbols?: GuideEncodeEntry,
-    gradient?: GuideEncodeEntry
+    title?: GuideEncodeEntry<GroupEncodeEntry>,
+    labels?: GuideEncodeEntry<TextEncodeEntry>,
+    legend?: GuideEncodeEntry<TextEncodeEntry>,
+    symbols?: GuideEncodeEntry<SymbolEncodeEntry>,
+    gradient?: GuideEncodeEntry<RectEncodeEntry>
   };
 }
 

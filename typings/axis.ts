@@ -1,4 +1,4 @@
-import {NumericValueRef} from './encode';
+import {GroupEncodeEntry, NumericValueRef, RuleEncodeEntry, TextEncodeEntry} from './encode';
 import {GuideEncodeEntry} from './legend';
 import {SignalRef} from './signal';
 
@@ -27,10 +27,10 @@ export interface Axis {
   minExtent?: number | NumericValueRef;
   maxExtent?: number | NumericValueRef;
   encode?: {
-    ticks?: GuideEncodeEntry,
-    labels?: GuideEncodeEntry,
-    title?: GuideEncodeEntry,
-    grid?: GuideEncodeEntry,
-    domain?: GuideEncodeEntry
+    ticks?: GuideEncodeEntry<GroupEncodeEntry>,
+    labels?: GuideEncodeEntry<TextEncodeEntry>,
+    title?: GuideEncodeEntry<TextEncodeEntry>,
+    grid?: GuideEncodeEntry<RuleEncodeEntry>,
+    domain?: GuideEncodeEntry<RuleEncodeEntry>
   };
 }
