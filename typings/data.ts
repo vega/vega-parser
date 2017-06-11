@@ -6,19 +6,21 @@ export type DataType = 'boolean' | 'number' | 'date' | 'string';
 
 export type Parse = 'auto' | {[f: string]: DataType};
 
-export type FormatJSON = {
-  type: 'json',
-  parse?: Parse,
-  property?: string,
-  copy?: boolean
-};
+export interface FormatJSON {
+  type: 'json';
+  parse?: Parse;
+  property?: string;
+  copy?: boolean;
+}
 
-export type FormatSV = {
-  type: 'csv' | 'tsv',
-  parse?: Parse
-};
+export interface FormatSV {
+  type: 'csv' | 'tsv';
+  parse?: Parse;
+}
 
-export type FormatDSV = FormatSV & {delimiter: string};
+export interface FormatDSV extends FormatSV {
+  delimiter: string;
+}
 
 export type FormatTopoJSON = {type: 'topojson', property?: string} &
   ({feature: 'string'} | {mesh: 'string'});

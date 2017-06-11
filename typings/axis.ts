@@ -4,33 +4,33 @@ import {SignalRef} from './signal';
 
 export type AxisOrient = 'top' | 'bottom' | 'left' | 'right';
 
-export type Axis = {
-  orient: AxisOrient,
-  scale: string,
-  name?: string,
-  title?: string | SignalRef,
-  zindex?: number,
-  interactive?: boolean,
-  ticks?: boolean,
-  labels?: boolean,
-  domain?: boolean,
-  grid?: boolean,
-  gridScale?: string,
-  tickSize?: number,
-  labelPadding?: number,
-  tickCount?: number | SignalRef,
-  format?: string | SignalRef,
-  values?: any[] | SignalRef,
-  offset?: number | NumericValueRef,
-  position?: number | NumericValueRef,
-  titlePadding?: number | NumericValueRef,
-  minExtent?: number | NumericValueRef,
-  maxExtent?: number | NumericValueRef,
+export interface Axis {
+  orient: AxisOrient;
+  scale: string;
+  name?: string;
+  title?: string | SignalRef;
+  zindex?: number;
+  interactive?: boolean;
+  ticks?: boolean;
+  labels?: boolean;
+  domain?: boolean;
+  grid?: boolean;
+  gridScale?: string;
+  tickSize?: number;
+  labelPadding?: number;
+  tickCount?: number | SignalRef;
+  format?: string | SignalRef;
+  values?: any[] | SignalRef;
+  offset?: number | NumericValueRef;
+  position?: number | NumericValueRef;
+  titlePadding?: number | NumericValueRef;
+  minExtent?: number | NumericValueRef;
+  maxExtent?: number | NumericValueRef;
   encode?: {
     ticks?: GuideEncodeEntry,
     labels?: GuideEncodeEntry,
     title?: GuideEncodeEntry,
     grid?: GuideEncodeEntry,
     domain?: GuideEncodeEntry
-  }
-};
+  };
+}

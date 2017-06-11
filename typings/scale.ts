@@ -14,19 +14,24 @@ export type RangeScheme = RangeEnum | RangeRaw | {
 export type RangeBand = RangeEnum | RangeRaw | {step: number | SignalRef};
 
 export type SortOrder = 'ascending' | 'descending' | SignalRef;
-export type SingleSort = {
+export interface SingleSort {
   sort?: boolean | {
     field?: ScaleField, op?: ScaleField, order?: SortOrder
-  }
-};
-export type MultiSort = {sort?: boolean | {op?: 'count', order?: SortOrder}};
+  };
+}
+export interface MultiSort {
+  sort?: boolean | {op?: 'count', order?: SortOrder};
+}
 
 export type ScaleField = string | SignalRef;
 
 export type ScaleInterpolate = string | SignalRef |
   {type: string | SignalRef, gamma?: string | SignalRef};
 
-export type DataRef = {data: string, field: ScaleField};
+export interface DataRef {
+  data: string;
+  field: ScaleField;
+}
 
 export type ScaleData = (DataRef & SingleSort) |
   (MultiSort & (
@@ -40,101 +45,102 @@ export type DiscreteScaleType = 'ordinal' | 'band' | 'point';
 export type DiscretizingScaleType = 'quantile' | 'quantize' | 'threshold' |
   'bin-linear' | 'bin-ordinal';
 
-export type ScaleType = QuantScaleType | DiscreteScaleType | DiscretizingScaleType;
+export type ScaleType = QuantScaleType | DiscreteScaleType |
+  DiscretizingScaleType | 'identity';
 
-export type BaseScale = {
-  name: string,
-  type: ScaleType,
-  domain?: (null | string | number | boolean | SignalRef)[] |  ScaleData | SignalRef,
-  domainMin?: number | SignalRef,
-  domainMax?: number | SignalRef,
-  domainMid?: number | SignalRef,
-  domainRaw?: null | any[] | SignalRef,
-  reverse?: boolean | SignalRef,
-  round?: boolean | SignalRef
-};
+export interface BaseScale {
+  name: string;
+  type: ScaleType;
+  domain?: (null | string | number | boolean | SignalRef)[] |  ScaleData | SignalRef;
+  domainMin?: number | SignalRef;
+  domainMax?: number | SignalRef;
+  domainMid?: number | SignalRef;
+  domainRaw?: null | any[] | SignalRef;
+  reverse?: boolean | SignalRef;
+  round?: boolean | SignalRef;
+}
 
-export type OrdinalScale = BaseScale & {
-  type: 'ordinal',
-  range?: RangeScheme | ScaleData
-};
+export interface OrdinalScale extends BaseScale {
+  type: 'ordinal';
+  range?: RangeScheme | ScaleData;
+}
 
-export type BandScale = BaseScale & {
-  type: 'band',
-  range?: RangeBand,
-  padding?: number | SignalRef,
-  paddingInner?: number | SignalRef,
-  paddingOuter?: number | SignalRef,
-  align?: number | SignalRef
-};
+export interface BandScale extends BaseScale {
+  type: 'band';
+  range?: RangeBand;
+  padding?: number | SignalRef;
+  paddingInner?: number | SignalRef;
+  paddingOuter?: number | SignalRef;
+  align?: number | SignalRef;
+}
 
-export type PointScale = BaseScale & {
-  type: 'point',
-  range?: RangeBand,
-  padding?: number | SignalRef,
-  paddingOuter?: number | SignalRef,
-  align?: number | SignalRef
-};
+export interface PointScale extends BaseScale {
+  type: 'point';
+  range?: RangeBand;
+  padding?: number | SignalRef;
+  paddingOuter?: number | SignalRef;
+  align?: number | SignalRef;
+}
 
-export type SequentialScale = BaseScale & {
-  type: 'sequential',
-  range: RangeScheme,
-  clamp?: boolean | SignalRef
-};
+export interface SequentialScale extends BaseScale {
+  type: 'sequential';
+  range: RangeScheme;
+  clamp?: boolean | SignalRef;
+}
 
 export type Nice = 'second' | 'minute' | 'hour' | 'day' | 'week' |
   'month' | 'year';
-export type TimeScale = BaseScale & {
-  type: 'time' | 'utc',
-  range?: RangeScheme,
-  clamp?: boolean | SignalRef,
-  nice?: boolean | Nice | SignalRef
-};
+export interface TimeScale extends BaseScale {
+  type: 'time' | 'utc';
+  range?: RangeScheme;
+  clamp?: boolean | SignalRef;
+  nice?: boolean | Nice | SignalRef;
+}
 
-export type IdentityScale = BaseScale & {
-  type: 'identity',
-  nice?: Nice
-};
+export interface IdentityScale extends BaseScale {
+  type: 'identity';
+  nice?: Nice;
+}
 
-export type DiscretizingScale = BaseScale & {
-  type: DiscreteScaleType,
-  range?: RangeScheme,
-  nice?: boolean | Nice | SignalRef,
-  zero?: boolean | SignalRef
-};
+export interface DiscretizingScale extends BaseScale {
+  type: DiscreteScaleType;
+  range?: RangeScheme;
+  nice?: boolean | Nice | SignalRef;
+  zero?: boolean | SignalRef;
+}
 
-export type LinearScale = BaseScale & {
-  type: 'linear',
-  range?: RangeScheme,
-  interpolate?: ScaleInterpolate,
-  clamp?: boolean | SignalRef,
-  nice?: boolean | number | SignalRef,
-  zero?: boolean | SignalRef
-};
+export interface LinearScale extends BaseScale {
+  type: 'linear';
+  range?: RangeScheme;
+  interpolate?: ScaleInterpolate;
+  clamp?: boolean | SignalRef;
+  nice?: boolean | number | SignalRef;
+  zero?: boolean | SignalRef;
+}
 
-export type LogScale = BaseScale & {
-  type: 'log',
-  range?: RangeScheme,
-  interpolate?: ScaleInterpolate,
-  base?: number | SignalRef,
-  clamp?: boolean | SignalRef,
-  nice?: boolean | number | SignalRef
-};
+export interface LogScale extends BaseScale {
+  type: 'log';
+  range?: RangeScheme;
+  interpolate?: ScaleInterpolate;
+  base?: number | SignalRef;
+  clamp?: boolean | SignalRef;
+  nice?: boolean | number | SignalRef;
+}
 
-export type PowScale = BaseScale & {
-  type: 'pow',
-  range?: RangeScheme,
-  interpolate?: ScaleInterpolate,
-  clamp?: boolean | SignalRef,
-  nice?: boolean | number | SignalRef,
-  zero?: boolean | SignalRef
-};
+export interface PowScale extends BaseScale {
+  type: 'pow';
+  range?: RangeScheme;
+  interpolate?: ScaleInterpolate;
+  clamp?: boolean | SignalRef;
+  nice?: boolean | number | SignalRef;
+  zero?: boolean | SignalRef;
+}
 
-export type BinLinearScale = BaseScale & {
-  type: 'bin-linear',
-  range?: RangeScheme,
-  interpolate?: ScaleInterpolate
-};
+export interface BinLinearScale extends BaseScale {
+  type: 'bin-linear';
+  range?: RangeScheme;
+  interpolate?: ScaleInterpolate;
+}
 
 export type Scale = OrdinalScale | BandScale | PointScale | SequentialScale |
   TimeScale | IdentityScale | DiscretizingScale | LinearScale | LogScale |
