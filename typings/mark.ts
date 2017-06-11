@@ -4,7 +4,6 @@ import {SortOrder} from './scale';
 import {Scope} from './scope';
 import {SignalRef} from './signal';
 
-
 export type Facet = {
   name: string, data: string, field: string
 } | {
@@ -13,7 +12,7 @@ export type Facet = {
   aggregate?: {cross?: boolean, fields: string[], ops: string[], as: string[]}
 };
 
-export type From = {data?: string};
+export interface From {data?: string;}
 export type FromFacet = From | (From & {facet: Facet});
 
 export type Compare = {
@@ -36,125 +35,53 @@ export interface BaseMark {
   // on?:
 }
 
-export interface ArcMark extends BaseMark {
+export interface ArcMark extends BaseMark, Encode.Encode<Encode.ArcEncodeEntry> {
   type: 'arc';
-  encode: {
-    enter?: Encode.ArcEncodeEntry,
-    update?: Encode.ArcEncodeEntry,
-    exit?: Encode.ArcEncodeEntry,
-    [p: string]: Encode.ArcEncodeEntry
-  };
 }
 
-export interface AreaMark extends BaseMark {
+export interface AreaMark extends BaseMark, Encode.Encode<Encode.AreaEncodeEntry> {
   type: 'area';
-  encode: {
-    enter?: Encode.AreaEncodeEntry,
-    update?: Encode.AreaEncodeEntry,
-    exit?: Encode.AreaEncodeEntry,
-    [p: string]: Encode.AreaEncodeEntry
-  };
 }
 
-export interface ImageMark extends BaseMark {
+export interface ImageMark extends BaseMark, Encode.Encode<Encode.ImageEncodeEntry> {
   type: 'image';
-  encode: {
-    enter?: Encode.ImageEncodeEntry;
-    update?: Encode.ImageEncodeEntry;
-    exit?: Encode.ImageEncodeEntry;
-    [p: string]: Encode.ImageEncodeEntry;
-  };
 }
 
-export interface GroupMark extends BaseMark, Scope {
+export interface GroupMark extends BaseMark, Scope, Encode.Encode<Encode.GroupEncodeEntry> {
   type: 'group';
   from: FromFacet;
-  encode: {
-    enter?: Encode.GroupEncodeEntry,
-    update?: Encode.GroupEncodeEntry,
-    exit?: Encode.GroupEncodeEntry,
-    [p: string]: Encode.GroupEncodeEntry
-  };
 }
 
-export interface LineMark extends BaseMark {
+export interface LineMark extends BaseMark, Encode.Encode<Encode.LineEncodeEntry> {
   type: 'line';
-  encode: {
-    enter?: Encode.LineEncodeEntry,
-    update?: Encode.LineEncodeEntry,
-    exit?: Encode.LineEncodeEntry,
-    [p: string]: Encode.LineEncodeEntry
-  };
 }
 
-export interface PathMark extends BaseMark {
+export interface PathMark extends BaseMark, Encode.Encode<Encode.PathEncodeEntry> {
   type: 'path';
-  encode: {
-    enter?: Encode.PathEncodeEntry,
-    update?: Encode.PathEncodeEntry,
-    exit?: Encode.PathEncodeEntry,
-    [p: string]: Encode.PathEncodeEntry
-  };
 }
 
-export interface RectMark extends BaseMark {
+export interface RectMark extends BaseMark, Encode.Encode<Encode.RectEncodeEntry> {
   type: 'rect';
-  encode: {
-    enter?: Encode.RectEncodeEntry,
-    update?: Encode.RectEncodeEntry,
-    exit?: Encode.RectEncodeEntry,
-    [p: string]: Encode.RectEncodeEntry
-  };
 }
 
-export interface RuleMark extends BaseMark {
+export interface RuleMark extends BaseMark, Encode.Encode<Encode.RuleEncodeEntry> {
   type: 'rule';
-  encode: {
-    enter?: Encode.EncodeEntry,
-    update?: Encode.EncodeEntry,
-    exit?: Encode.EncodeEntry,
-    [p: string]: Encode.EncodeEntry
-  };
 }
 
-export interface ShapeMark extends BaseMark {
+export interface ShapeMark extends BaseMark, Encode.Encode<Encode.ShapeEncodeEntry> {
   type: 'shape';
-  encode: {
-    enter?: Encode.ShapeEncodeEntry,
-    update?: Encode.ShapeEncodeEntry,
-    exit?: Encode.ShapeEncodeEntry,
-    [p: string]: Encode.ShapeEncodeEntry
-  };
 }
 
-export interface SymbolMark extends BaseMark {
+export interface SymbolMark extends BaseMark, Encode.Encode<Encode.SymbolEncodeEntry> {
   type: 'symbol';
-  encode: {
-    enter?: Encode.SymbolEncodeEntry,
-    update?: Encode.SymbolEncodeEntry,
-    exit?: Encode.SymbolEncodeEntry,
-    [p: string]: Encode.SymbolEncodeEntry
-  };
 }
 
-export interface TextMark extends BaseMark {
+export interface TextMark extends BaseMark, Encode.Encode<Encode.TextEncodeEntry> {
   type: 'text';
-  encode: {
-    enter?: Encode.TextEncodeEntry,
-    update?: Encode.TextEncodeEntry,
-    exit?: Encode.TextEncodeEntry,
-    [p: string]: Encode.SymbolEncodeEntry
-  };
 }
 
-export interface TrailMark extends BaseMark {
+export interface TrailMark extends BaseMark, Encode.Encode<Encode.TrailEncodeEntry> {
   type: 'trail';
-  encode: {
-    enter?: Encode.TrailEncodeEntry,
-    update?: Encode.TrailEncodeEntry,
-    exit?: Encode.TrailEncodeEntry,
-    [p: string]: Encode.TrailEncodeEntry
-  };
 }
 
 export type Mark = ArcMark | AreaMark | ImageMark | GroupMark | LineMark |

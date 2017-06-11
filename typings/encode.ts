@@ -135,6 +135,8 @@ export interface RectEncodeEntry extends EncodeEntry {
   cornerRadius?: ProductionRule<NumericValueRef>;
 }
 
+export type RuleEncodeEntry = EncodeEntry;
+
 export interface ShapeEncodeEntry extends EncodeEntry {
   shape: ProductionRule<StringValueRef>;
 }
@@ -151,7 +153,7 @@ export type TextDirection = 'ltr' | 'rtl';
 export type FontWeight = 'normal' | 'bold';
 export type FontStyle = 'normal' | 'italic';
 export interface TextEncodeEntry extends EncodeEntry, AlignProperty, ThetaProperty {
-  text: ProductionRule<StringValueRef>;
+  text?: ProductionRule<StringValueRef>;
 
   angle?: ProductionRule<NumericValueRef>;
   baseline?: ProductionRule<ScaledValueRef<TextBaseline>>;
@@ -168,3 +170,13 @@ export interface TextEncodeEntry extends EncodeEntry, AlignProperty, ThetaProper
 }
 
 export interface TrailEncodeEntry extends EncodeEntry, DefinedProperty, ThetaProperty {}
+
+export interface Encode<T> {
+  encode?: {
+    enter?: T,
+    update?: T,
+    exit?: T,
+    hover?: T,
+    [s:string]: T
+  };
+}
