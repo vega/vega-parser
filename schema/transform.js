@@ -123,7 +123,8 @@ function subParameterSchema(sub) {
   sub.params.forEach(function(param) {
     props[param.name] = parameterSchema(param);
     if (param.required) required.push(param.name);
-  })
+  });
+
   var schema = {
     "type": "object",
     "properties": props,

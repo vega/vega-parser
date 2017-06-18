@@ -366,7 +366,7 @@ prototype.addScaleProj = function(name, transform) {
     error('Duplicate scale or projection name: ' + stringValue(name));
   }
   this.scales[name] = this.add(transform);
-}
+};
 
 prototype.addScale = function(name, params) {
   this.addScaleProj(name, Scale(params));
