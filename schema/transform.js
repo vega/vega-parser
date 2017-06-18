@@ -80,9 +80,12 @@ function parameterSchema(param) {
   if (param.expr) {
     var expr = {"$ref": "#/refs/expr"},
         field = {"$ref": "#/refs/paramField"};
-    p = p.anyOf
-      ? (p.anyOf.push(expr), p.anyOf.push(field), p)
-      : {"oneOf": [p, expr, field]};
+    if (p.anyOf) {
+      p = p.anyOf.push(expr);
+      p.anyOf.push(field);
+    } else {
+      p = {"oneOf": [p, expr, field]};
+    }
   }
 
   if (param.array) {
