@@ -1,6 +1,6 @@
 import parseEncode from '../encode';
-import {FrameRole, MarkRole} from '../marks/roles';
 import {extend, isObject} from 'vega-util';
+import {getConfig} from '../marks/role';
 
 export function encoder(_) {
   return isObject(_) ? _ : {value: _};
@@ -45,9 +45,7 @@ function applyDefaults(encode, type, role, config) {
     role = null;
   }
 
-  config = role === FrameRole ? config.group
-    : (role === MarkRole || config[type = role]) ? extend({}, config.mark, config[type])
-    : {};
+  config = getConfig(config, type, role);
 
   enter = {};
   for (key in config) {

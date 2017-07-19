@@ -1,12 +1,15 @@
-import role from './role';
+import {default as getRole, getConfig} from './role';
 
-export default function(spec) {
+export default function(spec, scope) {
+  var role = spec.role || getRole(spec),
+      config = getConfig(scope.config, spec.type, role);
+
   return {
-    clip:        spec.clip || false,
+    clip:        spec.clip || config.clip || false,
     interactive: spec.interactive === false ? false : true,
     marktype:    spec.type,
     name:        spec.name || undefined,
-    role:        spec.role || role(spec),
+    role:        role,
     zindex:      +spec.zindex || undefined
   };
 }
