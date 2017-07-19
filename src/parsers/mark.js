@@ -40,7 +40,7 @@ export default function(spec, scope) {
 
   // connect visual items to scenegraph
   op = scope.add(Mark({
-    markdef:   definition(spec),
+    markdef:   definition(spec, scope),
     context:   {$context: true},
     groups:    scope.lookup(),
     parent:    scope.signals.parent ? scope.signalRef('parent') : null,
