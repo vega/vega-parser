@@ -5,7 +5,7 @@ export default function(spec, scope) {
       config = getConfig(scope.config, spec.type, role);
 
   return {
-    clip:        spec.clip || config.clip || false,
+    clip:        spec.clip != null ? spec.clip : (config.clip || false),
     interactive: spec.interactive === false ? false : true,
     marktype:    spec.type,
     name:        spec.name || undefined,
