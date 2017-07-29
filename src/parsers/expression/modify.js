@@ -1,15 +1,24 @@
 import {isTuple} from 'vega-dataflow';
-import {isArray, truthy} from 'vega-util';
+import {isArray, isObject, truthy} from 'vega-util';
 
 function equal(a, b) {
   return a === b || a !== a && b !== b ? true
     : isArray(a) && isArray(b) && a.length === b.length ? equalArray(a, b)
+    : isObject(a) && isObject(b) ? equalObject(a, b)
     : false;
 }
 
 function equalArray(a, b) {
   for (var i=0, n=a.length; i<n; ++i) {
     if (!equal(a[i], b[i])) return false;
+  }
+  return true;
+}
+
+function equalObject(a, b) {
+  var keys = Object.keys(a);
+  for (var i=0, n=keys.length; i<n; ++i) {
+    if (!equal(a[keys[i]], b[keys[i]])) return false;
   }
   return true;
 }
