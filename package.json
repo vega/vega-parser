@@ -27,7 +27,8 @@
     "pretest": "rm -rf build && mkdir build && npm run rollup && npm run schema",
     "test": "tape 'test/**/*-test.js' && eslint index.js src test",
     "prepublish": "npm run build",
-    "postpublish": "git push && git push --tags && zip -j build/vega-parser.zip -- LICENSE README.md build/vega-schema.js build/vega-parser.js build/vega-parser.min.js"
+    "postpublish": "git push && git push --tags && zip -j build/vega-parser.zip -- LICENSE README.md build/vega-schema.js build/vega-parser.js build/vega-parser.min.js",
+    "schema:axis": "ts-json-schema-generator -p 'typings/axis.ts' --type Axis"
   },
   "dependencies": {
     "d3-array": "1",
@@ -45,6 +46,7 @@
     "eslint": "2",
     "rollup": "0.36",
     "tape": "4",
+    "ts-json-schema-generator": "^0.14.0",
     "uglify-js": "2"
   }
 }
