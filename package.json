@@ -47,6 +47,6 @@
     "rollup": "0.43",
     "tape": "4",
     "uglify-js": "3",
-    "vega-transforms": "1"
+    "vega-transforms": "3"
   }
 }
