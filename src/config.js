@@ -48,6 +48,9 @@ function defaults() {
     // covers the entire view component
     background: null,
 
+    // default user-defined metadata
+    usermeta: null,
+
     // default event handling configuration
     // preventDefault for view-sourced event types except 'wheel'
     events: {

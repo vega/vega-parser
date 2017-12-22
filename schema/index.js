@@ -20,6 +20,7 @@ import signal from './signal';
 import stream from './stream';
 import title from './title';
 import transform from './transform';
+import usermeta from './usermeta';
 
 function extend(target, source) {
   for (var key in source) {
@@ -78,7 +79,8 @@ export default function(definitions) {
     signal,
     stream,
     title,
-    transform(definitions)
+    transform(definitions),
+    usermeta
   ].forEach(function(module) {
     addModule(schema, module);
   });
