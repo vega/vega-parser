@@ -145,6 +145,7 @@ function defaults() {
       labelLimit: 180,
       labelPadding: 2,
       ticks: true,
+      integer: false,
       tickColor: gray,
       tickOffset: 0,
       tickRound: true,

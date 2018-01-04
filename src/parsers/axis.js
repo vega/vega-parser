@@ -25,6 +25,7 @@ export default function(spec, scope) {
   datum = {
     orient: spec.orient,
     ticks:  !!value(spec.ticks, config.ticks),
+    integer:  !!value(spec.integer, config.integer),
     labels: !!value(spec.labels, config.labels),
     grid:   !!value(spec.grid, config.grid),
     domain: !!value(spec.domain, config.domain),
@@ -49,6 +50,7 @@ export default function(spec, scope) {
     scale:  scope.scaleRef(spec.scale),
     extra:  config.tickExtra,
     count:  scope.objectProperty(spec.tickCount),
+    integer: scope.property(spec.integer),
     values: scope.objectProperty(spec.values),
     formatSpecifier: scope.property(spec.format)
   })));

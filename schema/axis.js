@@ -32,6 +32,7 @@ export default {
         "title": {"$ref": "#/refs/stringOrSignal"},
         "zindex": {"type": "number"},
         "ticks": {"type": "boolean"},
+        "integer": {"type": "boolean"},
         "labels": {"type": "boolean"},
         "domain": {"type": "boolean"},
         "grid": {"type": "boolean"},
@@ -103,6 +104,7 @@ export default {
           "properties": {
             "axis": {"$ref": "#/defs/guideEncode"},
             "ticks": {"$ref": "#/defs/guideEncode"},
+            "integer": {"$ref": "#/defs/guideEncode"},
             "labels": {"$ref": "#/defs/guideEncode"},
             "title": {"$ref": "#/defs/guideEncode"},
             "grid": {"$ref": "#/defs/guideEncode"},
