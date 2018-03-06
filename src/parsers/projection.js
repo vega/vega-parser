@@ -12,8 +12,13 @@ export default function(proj, scope) {
 }
 
 function parseParameter(_, scope) {
-  return isArray(_) ? _.map(function(_) { return parseParameter(_, scope); })
-    : !isObject(_) ? _
-    : _.signal ? scope.signalRef(_.signal)
-    : error('Unsupported parameter object: ' + stringValue(_));
+  if(isArray(_)) {
+    _.map(function(_) { return parseParameter(_, scope); });
+  } else if(isObject(_) || isNumber(_) || isString(_)) {
+    return _;
+  } else if(_.signal) {
+    return scope.signalRef(_.signal);
+  } else {
+    error('Unsupported parameter object: ' + stringValue(_));
+  }
 }
