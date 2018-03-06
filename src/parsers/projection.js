@@ -19,6 +19,6 @@ function parseParameter(_, scope) {
   } else if(_.signal) {
     return scope.signalRef(_.signal);
   } else {
-    error('Unsupported parameter object: ' + stringValue(_))
+    error('Unsupported parameter object: ' + stringValue(_));
   }
 }
