@@ -139,6 +139,10 @@ function getValue(scope, encode, name, style) {
     (encode.update && encode.update[name]) ||
     (encode.enter && encode.enter[name])
   );
-  return +(v ? v.value // TODO support signal?
-    : (style && (v = scope.config.style[style]) && v[name]));
+  if (v) {
+    if (v.value) return +v.value;
+    if (v.signal) return v;
+  }
+  v = scope.config.style[style]
+  if (v) return +v[name];
 }
